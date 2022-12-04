@@ -16,7 +16,6 @@ class CreatorAdapter(
     class CreatorViewHolder(view : View) : RecyclerView.ViewHolder(view){
         fun bindCreator(Creator : Creator){
             itemView.creator_name.text = Creator.name
-            itemView.creator_biography.text = Creator.biography
             itemView.creator_lifecycle.text = "${Creator.birth_year} - ${Creator.death_year}"
         }
     }
