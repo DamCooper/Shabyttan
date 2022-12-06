@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.shabyttan.models.Creator
 import kotlinx.android.synthetic.main.creator_item.view.*
 
@@ -15,7 +14,7 @@ class CreatorAdapter(
 
     class CreatorViewHolder(view : View) : RecyclerView.ViewHolder(view){
         fun bindCreator(Creator : Creator){
-            itemView.creator_name.text = Creator.name
+            itemView.artwork_title.text = Creator.name
             itemView.creator_lifecycle.text = "${Creator.birth_year} - ${Creator.death_year}"
         }
     }

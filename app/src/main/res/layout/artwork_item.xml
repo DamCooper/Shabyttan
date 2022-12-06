@@ -26,13 +26,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/creator_lifecycle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="creator lifecycle"
-            android:textColor="#FFEB3B" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

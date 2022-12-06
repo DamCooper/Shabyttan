@@ -17,4 +17,9 @@ data class Artwork(
     constructor() : this(
         "", "", "",
     )
+
+    override fun toString(): String {
+        return "Artwork(accession_number='$accession_number', id='$id', title='$title')"
+    }
+
 }

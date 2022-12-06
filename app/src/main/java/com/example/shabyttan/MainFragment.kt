@@ -3,13 +3,26 @@ package com.example.shabyttan
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import com.example.shabyttan.models.Artwork
+import com.example.shabyttan.models.ArtworkResponse
+import com.example.shabyttan.models.Creator
+import com.example.shabyttan.models.CreatorResponse
+import com.example.shabyttan.services.CreatorApiInterface
+import com.example.shabyttan.services.CreatorApiService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_main.view.*
+import kotlinx.android.synthetic.main.fragment_search.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import kotlin.random.Random
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -44,10 +57,32 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
 
         val inflatedView = inflater.inflate(R.layout.fragment_main, container, false);
-        val scrollView: NestedScrollView = inflatedView.findViewById(R.id.scrollview)
-
+        getArtworkData { artworks : List<Artwork> ->
+            run {
+                val randomIndex = Random.nextInt(artworks.size);
+                val artwork = artworks[randomIndex]
+                Log.d("TAG", artwork.toString())
+            }
+        }
 
         return inflater.inflate(R.layout.fragment_main, container, false)
+    }
+
+    private fun getArtworkData(callback: (List<Artwork>) -> Unit) {
+        val apiService = CreatorApiService.getInstance().create(CreatorApiInterface::class.java)
+        apiService.getArtworksList().enqueue(object : Callback<ArtworkResponse> {
+            override fun onFailure(call: Call<ArtworkResponse>, t: Throwable) {
+
+            }
+
+            override fun onResponse(
+                call: Call<ArtworkResponse>,
+                response: Response<ArtworkResponse>
+            ) {
+                return callback(response.body()!!.artworks)
+            }
+
+        })
     }
 
     companion object {
