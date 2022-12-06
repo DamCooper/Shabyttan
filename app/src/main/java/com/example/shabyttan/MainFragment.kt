@@ -46,33 +46,6 @@ class MainFragment : Fragment() {
         val inflatedView = inflater.inflate(R.layout.fragment_main, container, false);
         val scrollView: NestedScrollView = inflatedView.findViewById(R.id.scrollview)
 
-        scrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (scrollY > oldScrollY) {
-               // Log.i(TAG, "Scroll DOWN")
-                val b = inflatedView.findViewById<FloatingActionButton>(R.id.refresh_button)
-                println("sadasdasda")
-                b.backgroundTintList = ColorStateList.valueOf(1234);
-                Toast.makeText(requireContext(),"this is toast message",Toast.LENGTH_SHORT).show()
-            }
-            if (scrollY < oldScrollY) {
-//                Log.i(TAG, "Scroll UP")
-                val b = inflatedView.findViewById<FloatingActionButton>(R.id.refresh_button)
-                println("sadasdasda")
-                b.backgroundTintList = ColorStateList.valueOf(1234);
-                Toast.makeText(requireContext(),"this is toast message",Toast.LENGTH_SHORT).show()
-            }
-            if (scrollY == 0) {
-//                Log.i(TAG, "TOP SCROLL")
-                Toast.makeText(requireContext(),"this is toast message",Toast.LENGTH_SHORT).show()
-
-            }
-            if (scrollY == v.measuredHeight - v.getChildAt(0).measuredHeight) {
-//                Log.i(TAG, "BOTTOM SCROLL")
-                Toast.makeText(requireContext(),"this is toast message",Toast.LENGTH_SHORT).show()
-
-            }
-        })
-
 
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
