@@ -6,9 +6,14 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ArtworkResponse(
-    @SerializedName("artworks")
+    @SerializedName("data")
     val artworks: List<Artwork>,
 
 ) : Parcelable {
     constructor() : this(mutableListOf())
+
+    override fun toString(): String {
+        return "ArtworkResponse(artworks=$artworks)"
+    }
+
 }
