@@ -50,7 +50,7 @@
             android:id="@+id/scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="-30dp"
+            android:layout_marginTop="-5dp"
             android:background="@drawable/shape"
             android:paddingLeft="20sp"
             android:paddingTop="30sp"
@@ -149,8 +149,8 @@
             android:clickable="true"
             android:focusable="true"
             app:fabSize="normal"
-            app:layout_anchor="@+id/scrollview"
-            app:layout_anchorGravity="end|top"
+            app:layout_anchor="@+id/appbar"
+            app:layout_anchorGravity="bottom|right"
             tools:ignore="SpeakableTextPresentCheck" />
 
 
@@ -160,14 +160,14 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="100dp"
             android:backgroundTint="#E92C2F31"
-            app:backgroundTint="#00FFFFFF"
-            android:src="@drawable/heart_svg"
             android:baselineAlignBottom="false"
             android:clickable="true"
             android:focusable="true"
+            android:src="@drawable/heart_svg"
+            app:backgroundTint="#00FFFFFF"
             app:fabSize="normal"
-            app:layout_anchor="@+id/scrollview"
-            app:layout_anchorGravity="end|top"
+            app:layout_anchor="@+id/appbar"
+            app:layout_anchorGravity="bottom|right"
             tools:ignore="SpeakableTextPresentCheck" />
 
 

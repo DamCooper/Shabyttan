@@ -1,28 +1,29 @@
 package com.example.shabyttan
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
+import com.bumptech.glide.Glide
+import com.example.shabyttan.models.ArtData
 import com.example.shabyttan.models.Artwork
 import com.example.shabyttan.models.ArtworkResponse
-import com.example.shabyttan.models.Creator
-import com.example.shabyttan.models.CreatorResponse
 import com.example.shabyttan.services.CreatorApiInterface
 import com.example.shabyttan.services.CreatorApiService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.fragment_main.view.*
-import kotlinx.android.synthetic.main.fragment_search.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.random.Random
+import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.view.*
+import kotlinx.coroutines.launch
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -39,7 +40,9 @@ class MainFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var art: ArtData
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,7 +50,23 @@ class MainFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
+        getArtworkData { artwork: ArtData ->
+            run {
+                art = artwork
+                Log.d("TAG", artwork.toString())
+                txt_title.text = artwork.title
+                txt_author.text = artwork.creators[0].description.toString().split("(")[0]
+                txt_year.text = artwork.creation_date
+                txt_description.text = Html.fromHtml(artwork.wall_description)
+                val resizeImage = artwork.images.web.url
+                Glide.with(this)
+                    .load(resizeImage)
+                    .into(image)
+            }
+        }
+
     }
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -57,29 +76,36 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
 
         val inflatedView = inflater.inflate(R.layout.fragment_main, container, false);
-        getArtworkData { artworks : List<Artwork> ->
-            run {
-                val randomIndex = Random.nextInt(artworks.size);
-                val artwork = artworks[randomIndex]
-                Log.d("TAG", artwork.toString())
+
+        inflatedView.like_button.setOnClickListener {
+            val db = context?.let { it1 ->
+                Room.databaseBuilder(
+                    it1,
+                    FavoriteDatabase::class.java, "favorites_database"
+                ).allowMainThreadQueries().build()
+            }
+            val favoriteDao = db?.favoriteDao()
+            lifecycleScope.launch {
+                favoriteDao?.addFavorite(Favorite(art.id, 0,
+                    art.title, art.creators[0].description.toString().split("(")[0]))
             }
         }
 
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        return inflatedView
     }
 
-    private fun getArtworkData(callback: (List<Artwork>) -> Unit) {
+    private fun getArtworkData(callback: (ArtData) -> Unit) {
         val apiService = CreatorApiService.getInstance().create(CreatorApiInterface::class.java)
-        apiService.getArtworksList().enqueue(object : Callback<ArtworkResponse> {
+        apiService.getArtworksList(92937).enqueue(object : Callback<ArtworkResponse> {
             override fun onFailure(call: Call<ArtworkResponse>, t: Throwable) {
-
+                throw t
             }
 
             override fun onResponse(
                 call: Call<ArtworkResponse>,
                 response: Response<ArtworkResponse>
             ) {
-                return callback(response.body()!!.artworks)
+                return callback(response.body()!!.artData)
             }
 
         })
