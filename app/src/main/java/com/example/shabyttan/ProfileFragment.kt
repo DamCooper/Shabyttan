@@ -44,7 +44,7 @@ class ProfileFragment : Fragment() {
             Room.databaseBuilder(
                 it,
                 FavoriteDatabase::class.java, "favorites_database"
-            ).allowMainThreadQueries().build()
+            ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
         }
         val favoriteDao = db?.favoriteDao()
         lifecycleScope.launch {

@@ -14,7 +14,9 @@ data class Favorite(
     @ColumnInfo(name = "title")
     val title: String,
     @ColumnInfo(name = "creator")
-    val creator: String
+    val creator: String,
+    @ColumnInfo(name = "imageUrl")
+    val imageUrl: String,
 
 ) {
     override fun toString(): String {

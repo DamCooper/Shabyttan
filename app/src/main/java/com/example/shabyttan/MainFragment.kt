@@ -41,7 +41,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MainFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var art: ArtData
@@ -54,6 +53,7 @@ class MainFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
         val path = context?.getFilesDir()
         val folder = File(path, "file")
         folder.mkdirs()
@@ -67,8 +67,12 @@ class MainFragment : Fragment() {
                 if (artwork.creators.isNotEmpty())
                     txt_author.text = artwork.creators[0].description.toString().split("(")[0]
                 else txt_author.text = "Unknown"
-                txt_year.text = artwork.creation_date
-                txt_description.text = Html.fromHtml(artwork.wall_description)
+                if (artwork.creation_date != null)
+                    txt_year.text = artwork.creation_date
+                else txt_year.text = "Unknown"
+                if (artwork.wall_description != null)
+                    txt_description.text = Html.fromHtml(artwork.wall_description)
+                else txt_description.text = "Sorry, there is no description."
                 val resizeImage = artwork.images.web.url
                 Glide.with(this)
                     .load(resizeImage)
@@ -93,14 +97,14 @@ class MainFragment : Fragment() {
                 Room.databaseBuilder(
                     it1,
                     FavoriteDatabase::class.java, "favorites_database"
-                ).allowMainThreadQueries().build()
+                ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
             }
             val favoriteDao = db?.favoriteDao()
             lifecycleScope.launch {
                 favoriteDao?.addFavorite(
                     Favorite(
                         art.id, 0,
-                        art.title, ""
+                        art.title, "", art.images.web.url
                     )
                 )
             }
@@ -124,8 +128,9 @@ class MainFragment : Fragment() {
         val folder = File(path, "file")
         folder.mkdirs()
         val file = File(folder, "ids.txt")
-        val id = file.readText()
+        var id = file.readText()
             .split(" ")[getRandomNumber()].toInt()
+        if (param1 != null) id = param1!!.toInt()
         apiService.getArtworksList(id).enqueue(object : Callback<ArtworkResponse> {
             override fun onFailure(call: Call<ArtworkResponse>, t: Throwable) {
                 throw t
@@ -140,6 +145,7 @@ class MainFragment : Fragment() {
 
         })
     }
+
 
 
 

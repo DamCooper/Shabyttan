@@ -1,9 +1,12 @@
 package com.example.shabyttan
 
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shabyttan.models.ArtData
@@ -13,11 +16,11 @@ import kotlinx.android.synthetic.main.artwork_item.view.*
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class ArtworkAdapter(
-    private val artworks : List<ArtData>
-) : RecyclerView.Adapter<ArtworkAdapter.ArtworkViewHolder>(){
+    private val artworks: List<ArtData>
+) : RecyclerView.Adapter<ArtworkAdapter.ArtworkViewHolder>() {
 
-    class ArtworkViewHolder(view : View) : RecyclerView.ViewHolder(view){
-        fun bindCreator(artwork : ArtData){
+    class ArtworkViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bindCreator(artwork: ArtData) {
             itemView.artwork_title.text = artwork.title
 
             val resizeImage = artwork.images.web.url
@@ -35,7 +38,18 @@ class ArtworkAdapter(
 
     override fun getItemCount(): Int = artworks.size
 
+
     override fun onBindViewHolder(holder: ArtworkViewHolder, position: Int) {
         holder.bindCreator(artworks.get(position))
+        holder.itemView.setOnClickListener {
+            val activity = it.context as AppCompatActivity
+            activity.supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, MainFragment.newInstance(artworks.get(position).id.toString(), ""))
+                .commitNow()
+        }
+
     }
+
+
 }
