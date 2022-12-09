@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
@@ -14,16 +16,18 @@ import com.bumptech.glide.Glide
 import com.example.shabyttan.models.ArtData
 import com.example.shabyttan.models.Artwork
 import com.example.shabyttan.models.ArtworkResponse
+import com.example.shabyttan.models.ArtworkResponse1
 import com.example.shabyttan.services.CreatorApiInterface
 import com.example.shabyttan.services.CreatorApiService
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.random.Random
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.File
+import java.util.*
+import kotlin.random.Random
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -42,6 +46,7 @@ class MainFragment : Fragment() {
     private var param2: String? = null
     private lateinit var art: ArtData
 
+
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +54,19 @@ class MainFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
+        val path = context?.getFilesDir()
+        val folder = File(path, "file")
+        folder.mkdirs()
+        val file = File(folder, "ids.txt")
+        Log.d("TAG", file.readText())
         getArtworkData { artwork: ArtData ->
             run {
                 art = artwork
                 Log.d("TAG", artwork.toString())
-                txt_title.text = artwork.title
-                txt_author.text = artwork.creators[0].description.toString().split("(")[0]
+                txt_title?.text = artwork.title
+                if (artwork.creators.isNotEmpty())
+                    txt_author.text = artwork.creators[0].description.toString().split("(")[0]
+                else txt_author.text = "Unknown"
                 txt_year.text = artwork.creation_date
                 txt_description.text = Html.fromHtml(artwork.wall_description)
                 val resizeImage = artwork.images.web.url
@@ -86,17 +97,36 @@ class MainFragment : Fragment() {
             }
             val favoriteDao = db?.favoriteDao()
             lifecycleScope.launch {
-                favoriteDao?.addFavorite(Favorite(art.id, 0,
-                    art.title, art.creators[0].description.toString().split("(")[0]))
+                favoriteDao?.addFavorite(
+                    Favorite(
+                        art.id, 0,
+                        art.title, ""
+                    )
+                )
             }
         }
 
         return inflatedView
     }
 
+    fun getRandomNumber(): Int {
+        val currentDate = Date()
+        val random =
+            Random("${currentDate.day + 467}${currentDate.month}${currentDate.year}".toInt())
+        return random.nextInt(1001) + 1
+    }
+
+
     private fun getArtworkData(callback: (ArtData) -> Unit) {
         val apiService = CreatorApiService.getInstance().create(CreatorApiInterface::class.java)
-        apiService.getArtworksList(92937).enqueue(object : Callback<ArtworkResponse> {
+        // 92937 94979
+        val path = context?.getFilesDir()
+        val folder = File(path, "file")
+        folder.mkdirs()
+        val file = File(folder, "ids.txt")
+        val id = file.readText()
+            .split(" ")[getRandomNumber()].toInt()
+        apiService.getArtworksList(id).enqueue(object : Callback<ArtworkResponse> {
             override fun onFailure(call: Call<ArtworkResponse>, t: Throwable) {
                 throw t
             }
@@ -110,6 +140,8 @@ class MainFragment : Fragment() {
 
         })
     }
+
+
 
     companion object {
         /**

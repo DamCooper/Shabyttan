@@ -10,8 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.shabyttan.models.Creator
-import com.example.shabyttan.models.CreatorResponse
+import com.example.shabyttan.models.*
 import com.example.shabyttan.services.CreatorApiInterface
 import com.example.shabyttan.services.CreatorApiService
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -34,6 +33,7 @@ class SearchFragment() : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var key: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,18 +52,21 @@ class SearchFragment() : Fragment() {
 
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
-    var name: String = ""
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         rv_creators_list.layoutManager = LinearLayoutManager(requireActivity())
         rv_creators_list.setHasFixedSize(true)
         val edit = view.findViewById<EditText>(R.id.input_search_creator)
-        view.findViewById<Button>(R.id.btn_search_creator).setOnClickListener{
+        key = "Vincent Van Gogh"
+        getArtworkDataByKey {
+            rv_creators_list.adapter = ArtworkAdapter(it)
+        }
 
-            name = edit.text.toString()
-            getCreatorData { creators : List<Creator> ->
-                rv_creators_list.adapter = CreatorAdapter(creators)
+        view.findViewById<Button>(R.id.btn_search_creator).setOnClickListener{
+            key = edit.text.toString()
+            getArtworkDataByKey {
+                rv_creators_list.adapter = ArtworkAdapter(it)
             }
             view.hideKeyboard()
         }
@@ -73,9 +76,27 @@ class SearchFragment() : Fragment() {
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
+    private fun getArtworkDataByKey(callback: (List<ArtData>) -> Unit) {
+        val apiService = CreatorApiService.getInstance().create(CreatorApiInterface::class.java)
+        // 92937 94979
+        apiService.getArtworksByKey(key).enqueue(object : Callback<ArtworkResponse1> {
+            override fun onFailure(call: Call<ArtworkResponse1>, t: Throwable) {
+                throw t
+            }
+
+            override fun onResponse(
+                call: Call<ArtworkResponse1>,
+                response: Response<ArtworkResponse1>
+            ) {
+                return callback(response.body()!!.artData)
+            }
+
+        })
+    }
+
     private fun getCreatorData(callback: (List<Creator>) -> Unit) {
         val apiService = CreatorApiService.getInstance().create(CreatorApiInterface::class.java)
-        apiService.getCreatorList(name).enqueue(object : Callback<CreatorResponse> {
+        apiService.getCreatorList(key).enqueue(object : Callback<CreatorResponse> {
             override fun onFailure(call: Call<CreatorResponse>, t: Throwable) {
 
             }

@@ -30,10 +30,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center|end"
+                    android:background="#454545"
                     android:scaleType="centerCrop"
                     android:tintMode="src_atop"
                     app:layout_collapseMode="parallax"
-                    app:srcCompat="@drawable/gog"
                     app:tint="#63000000" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -73,7 +73,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:fontFamily="@font/playfair_display"
-                    android:text="Three heroes"
                     android:textColor="#FFFFFF"
                     android:textSize="34sp" />
 
@@ -97,24 +96,22 @@
                             android:paddingTop="5dp"
                             android:paddingRight="15dp"
                             android:paddingBottom="5dp"
-                            android:text="Van Gogh"
+                            android:text="           "
                             android:textAlignment="center"
                             android:textColor="#BDBDBD"
                             android:textSize="24sp" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/txt_year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="15dp"
-                        android:fontFamily="@font/lora"
-                        android:text="1960 y. "
-                        android:textColor="#BDBDBD"
-                        android:textSize="24sp" />
-
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/lora"
+                    android:textColor="#BDBDBD"
+                    android:textSize="24sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,7 +127,6 @@
                     android:layout_marginTop="30dp"
                     android:fontFamily="@font/lora"
                     android:lineSpacingExtra="10sp"
-                    android:text="If you're providing multiple versions of the same resource, be sure to add device configuration qualifiers that describe the specific configuration that the resource supports. For example, if you're providing multiple versions of the same resource for different screen densities, you can add a Density qualifier for each version. Note that if two or more resources have the same name and qualifiers, only one version is imported. For more information on resource qualifiers, see Providing alternative. If you're providing multiple versions of the same resource, be sure to add device configuration qualifiers that describe the specific configuration that the resource supports. For example, if you're providing multiple versions of the same resource for different screen densities, you can add a Density qualifier for each version. Note that if two or more resources have the same name and qualifiers, only one version is imported. For more information on resource qualifiers, see Providing alternative. If you're providing multiple versions of the same resource, be sure to add device configuration qualifiers that describe the specific configuration that the resource supports. For example, if you're providing multiple versions of the same resource for different screen densities, you can add a Density qualifier for each version. Note that if two or more resources have the same name and qualifiers, only one version is imported. For more information on resource qualifiers, see Providing alternative. If you're providing multiple versions of the same resource, be sure to add device configuration qualifiers that describe the specific configuration that the resource supports. For example, if you're providing multiple versions of the same resource for different screen densities, you can add a Density qualifier for each version. Note that if two or more resources have the same name and qualifiers, only one version is imported. For more information on resource qualifiers, see Providing alternative. If you're providing multiple versions of the same resource, be sure to add device configuration qualifiers that describe the specific configuration that the resource supports. For example, if you're providing multiple versions of the same resource for different screen densities, you can add a Density qualifier for each version. Note that if two or more resources have the same name and qualifiers, only one version is imported. For more information on resource qualifiers, see Providing alternative."
                     android:textColor="#C1C1C1"
                     android:textSize="20sp" />
 

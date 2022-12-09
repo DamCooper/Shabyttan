@@ -89,7 +89,6 @@ data class Creators(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("description") var description: String? = null,
     @SerializedName("extent") var extent: String? = null,
-    @SerializedName("qualifier") var qualifier: String? = null,
     @SerializedName("role") var role: String? = null,
     @SerializedName("biography") var biography: String? = null,
     @SerializedName("name_in_original_language") var nameInOriginalLanguage: String? = null,

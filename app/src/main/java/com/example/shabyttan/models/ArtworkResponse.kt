@@ -15,3 +15,15 @@ data class ArtworkResponse(
     }
 
 }
+
+@Parcelize
+data class ArtworkResponse1(
+    @SerializedName("data")
+    val artData: List<ArtData>,
+
+    ) : Parcelable {
+    override fun toString(): String {
+        return "ArtworkResponse(artworks=$artData)"
+    }
+
+}
